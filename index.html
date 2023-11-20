@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Updater</title>
+</head>
+<body>
+    <h1>Config Updater</h1>
+    <label for="configInput">Enter Configuration Value:</label>
+    <input type="text" id="configInput" placeholder="Enter value">
+    <button onclick="updateConfig()">Update Config</button>
+
+    <script>
+        function updateConfig() {
+            var inputValue = document.getElementById("configInput").value;
+
+            // Update your configuration file (config.json) with the new value
+            fetch('https://api.github.com/repos/gmondello/fubar/contents/config.json', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': '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',
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: 'Update config.json',
+                    content: btoa(JSON.stringify({ value: inputValue })),
+                    sha: 'SHA_OF_YOUR_CURRENT_CONFIG_JSON',
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Config updated successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error updating config:', error);
+            });
+        }
+    </script>
+</body>
+</html>
